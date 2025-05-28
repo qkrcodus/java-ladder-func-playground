@@ -1,4 +1,8 @@
-enum, 일급 컬렉션, 원시값 포장하기가 프로그램의 요구 사항이여서 우선 이들이 언제 사용되고 사다리에선 어떻게 쓰이면 좋을지 다시 공부해보았습니다.
+### 개인적 목표 
+- enum, 일급 컬렉션, 원시값 필요한 상황에서 잘 사용해보기
+---
+### enum, 일급 컬렉션, 원시값 포장하기가 프로그램의 요구 사항이여서 우선 이들이 언제 사용되고 사다리에선 어떻게 쓰이면 좋을지 다시 공부해보았습니다.
+
 ---
 
 ### [ enum ] - 고정된 상태에 따른 행동/속성 정의하고 싶을 때 사용
@@ -26,23 +30,29 @@ Enum 과 일급 컬렉션은 둘 다 정보 은닉을 목적으로 한다.
 
 ---
 
-### 사다리 전체 구조 ~> 사다리 구성요소가 무엇인지 생각하며 어떤 객체들이 필요할지 고민했습니다.
+### 사다리 구성요소가 무엇인지 생각하며 어떤 클래스들이 필요할지 고민했습니다.
 Ladder -> Floor -> Connection
 Ladder : List<Floor> - 일급 컬렉션
-Floor : List<Connection> - 일급 컬렉션 
+Floor : List<Connection> - 일급 컬렉션
 Connection : boolean isConnected, public static Connection.of(boolean) - 정적 팩토리 메서드 (생성 제약 있음)
-원시값 포장이 필요한 부분은 없는 것 같다. 
+원시값 포장이 필요한 부분은 없는 것 같다.
 
-- | 4개와 중간 연결 지점 3개 : Floor
-- Floor 4개 : Ladder
+- | width 개와 중간 연결 지점 width-1개 : Floor
+- Floor height개 : Ladder
 - 연결 지점 랜덤으로 단, 연속 불가 : Connection
 
 ---
-### 작은 객체의 역할을 생각하고 구현해보며 테스트로 확인해보았습니다.
+
+### 3단계 게임 결과 출력하기
+- 사다리의 결과를 계산하는 역할을 하는 LadderResult을 추가해줬습니다.
+- 한 층인 Floor는 ----- 연결 여부에 대한 정보가 있으므로, floor에게 연결 여부를 묻고 오른쪽으로 연결 되어있다면 index+1, 왼쪽으로 연결되어 있다면 index-1 해줍니다.
+- 사다리의 각 층인 Floor를 차례로 내려가며 현재 위치인 position을 갱신해주며 아래층까지 내려옵니다.
+
+### 정리
 - Connectiion : ----- 연결 여부 판단, 이전에 연결되었는진 Floor에게 물어본다.
 - Floor : 각 층마다 ----- 연결 여부의 조합
-- Ladder : Floor 4개 조립, 층의 형태는 Floor에게 물어본다.
+- Ladder : Floor height개 조립, 각층의 형태는 Floor에게 물어본다.
 - OutputView : 사다리 출력
-- LadderController : 
-- LadderApplication : 
-
+- LadderController : view정보를 model 에게 전달, model의 상태를 view에게 전달
+- LadderApplication : 조립
+- LadderResult : 사다리 게임 계산

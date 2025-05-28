@@ -9,8 +9,8 @@ public class Connection {
         this.connected = connected;
     }
 
-    public static Connection of(boolean previousConnected,Random random) {
-        boolean connect=!previousConnected&&random.nextBoolean();
+    public static Connection of(boolean previousConnected, Random random) {
+        boolean connect = !previousConnected && random.nextBoolean();
         return new Connection(connect);
     }
 
